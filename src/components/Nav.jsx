@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import logo from '../assets/logo.png'; // Adjust the path as needed
-import searchIcon from '../assets/search.png'; // Adjust the path as needed
-import cart from '../assets/cart.png'; // Adjust the path as needed
-import account from '../assets/person.png'; // Adjust the path as needed
-
+import logo from '../assets/logo.png'; 
+import searchIcon from '../assets/search.png'; 
+import cart from '../assets/cart.png'; 
+import account from '../assets/person.png'; 
 function Nav() {
   const [isSearchActive, setSearchActive] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -75,7 +74,7 @@ function Nav() {
       </nav>
 
       {/* Icons and Search Bar */}
-      <div className="flex items-center space-x-4 -ml-12"> {/* Adjusted margin to shift left */}
+      <div className="flex items-center space-x-4 -ml-12"> 
         {/* Search Icon or Sliding Search Bar */}
         <div
           ref={searchRef}
