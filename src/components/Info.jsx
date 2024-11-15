@@ -24,25 +24,19 @@ const Info = () => {
     ];
 
     const slideSpeed = 1500; // Adjust slide speed as needed
-    const [translateX, setTranslateX] = useState(0);
+    const brands = [...firstSet, ...secondSet];
+    const brandsPerSlide = 4; // Set 4 brands per slide
+    const totalSlides = Math.ceil(brands.length / brandsPerSlide);
+
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-           
-            setTranslateX((prevTranslateX) => prevTranslateX - 100);
-        }, 5000); // Adjust interval as needed for display time per set
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % totalSlides); // Loop through the slides
+        }, 5000); // Adjust interval as needed for display time per slide
 
         return () => clearInterval(interval);
-    }, []);
-
-    // Reset the position when the animation completes
-    useEffect(() => {
-        if (translateX <= -200) { 
-            setTimeout(() => {
-                setTranslateX(0);
-            }, slideSpeed); 
-        }
-    }, [translateX]);
+    }, [totalSlides]);
 
     return (
         <>
@@ -52,13 +46,12 @@ const Info = () => {
                 <div className="flex justify-center space-x-8 max-w-4xl mx-auto">
                     {[{ heading: 'LESS HASSLE', text: 'Discover a streamlined shopping experience designed to make browsing, purchasing, and service requests easy and efficient.' },
                     { heading: 'MORE POWER', text: 'Access an impressive selection of firearms and accessories that deliver on both performance and reliability.' },
-                    { heading: 'BETTER SUPPORT', text: 'Count on expert advice and after-sales assistance that keep you informed and prepared.' }]
-                        .map(({ heading, text }, idx) => (
-                            <div className="text-center w-1/3" key={idx}>
-                                <h2 className="text-lg font-bold text-red-500 mb-3">{heading}</h2>
-                                <p className="text-base leading-relaxed font-bold">{text}</p>
-                            </div>
-                        ))}
+                    { heading: 'BETTER SUPPORT', text: 'Count on expert advice and after-sales assistance that keep you informed and prepared.' }].map(({ heading, text }, idx) => (
+                        <div className="text-center w-1/3" key={idx}>
+                            <h2 className="text-lg font-bold text-red-500 mb-3">{heading}</h2>
+                            <p className="text-base leading-relaxed font-bold">{text}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -90,22 +83,26 @@ const Info = () => {
                 <p className="font-light">VIEW MORE BRANDS</p>
             </div>
 
-            {/* Automatic Brand Image Slider Constrained to Centered Section */}
+            {/* Automatic Brand Image Slider */}
             <div className="relative w-full flex justify-center mt-8">
                 <div className="w-full max-w-lg overflow-hidden">
                     <div
                         className="flex space-x-6 transition-transform ease-in-out"
                         style={{
-                            transform: `translateX(${translateX}%)`,
-                            transitionDuration: `${slideSpeed}ms`
+                            transform: `translateX(-${currentSlide * 100}%)`, // Slide by 100% per slide
+                            transitionDuration: `${slideSpeed}ms`,
                         }}
                     >
-                        {/* Render both sets in sequence for continuous sliding */}
-                        {[...firstSet, ...secondSet].map((brand, index) => (
-                            <div className="brand-container flex-shrink-0 p-2" key={index}>
-                                <div className="w-24 h-24 flex items-center justify-center overflow-hidden">
-                                    <img src={brand.src} alt={brand.name} className="max-w-full max-h-full" />
-                                </div>
+                        {/* Render 4 brands per slide */}
+                        {Array.from({ length: totalSlides }).map((_, slideIndex) => (
+                            <div className="flex" key={slideIndex}>
+                                {brands.slice(slideIndex * brandsPerSlide, (slideIndex + 1) * brandsPerSlide).map((brand, index) => (
+                                    <div className="brand-container flex-shrink-0 p-2" key={index}>
+                                        <div className="w-24 h-24 flex items-center justify-center overflow-hidden">
+                                            <img src={brand.src} alt={brand.name} className="max-w-full max-h-full" />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>
